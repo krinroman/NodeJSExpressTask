@@ -1,15 +1,6 @@
 let inputElement = document.getElementById("input_text");
 let outputElement = document.getElementById("list_out");
 
-function getMaxNumber(){
-	let max = 0;
-	outputElement.querySelectorAll("li").forEach(function(node){
-			let num = node.querySelector("span[id=number]").textContent;
-			if(parseInt(num) > max) max = parseInt(num);
-	});
-	return max;
-}
-
 function getIndexCheckedRadioButton(){
 	let rad=document.getElementsByName('sort');
 	for (let i=0;i<rad.length; i++) {
@@ -17,60 +8,6 @@ function getIndexCheckedRadioButton(){
             return i;
         }
     }
-}
-
-function sort(){
-	let index = getIndexCheckedRadioButton();
-	let nodeList = outputElement.querySelectorAll("li");
-	//так как NodeList не имеет метода sort, преобразуем его к Array
-	let itemsArray = Array.prototype.slice.call(nodeList);
-	switch (index) {
-		case 0:{
-			itemsArray = itemsArray.sort(function(nodeA, nodeB){
-				//childNodes[0] - это span с id "number"
-				let val1 = parseInt(nodeA.childNodes[0].textContent);
-				let val2 = parseInt(nodeB.childNodes[0].textContent);
-				if(val1 > val2) return 1;
-				if(val1 == val2) return 0;
-				if(val1 < val2) return -1;
-			});
-		}break;
-		case 1:{
-			itemsArray.sort(function(nodeA, nodeB){
-				//childNodes[0] - это span с id "number"
-				let val1 = parseInt(nodeA.childNodes[0].textContent);
-				let val2 = parseInt(nodeB.childNodes[0].textContent);
-				if(val1 < val2) return 1;
-				if(val1 == val2) return 0;
-				if(val1 > val2) return -1;
-			});
-		}break;
-		case 2:{
-			itemsArray = itemsArray.sort(function(nodeA, nodeB){
-				//childNodes[2] - это span с id "value"
-				let val1 = nodeA.childNodes[2].textContent;
-				let val2 = nodeB.childNodes[2].textContent;
-				if(val1 > val2) return 1;
-				if(val1 == val2) return 0;
-				if(val1 < val2) return -1;
-			});
-		}break;
-		case 3:{
-			itemsArray = itemsArray.sort(function(nodeA, nodeB){
-				//childNodes[2] - это span с id "value"
-				let val1 = nodeA.childNodes[2].textContent;
-				let val2 = nodeB.childNodes[2].textContent;
-				if(val1 < val2) return 1;
-				if(val1 == val2) return 0;
-				if(val1 > val2) return -1;
-			});
-		}break;
-		default: break;
-	}
-	outputElement.innerHTML = '';
-	itemsArray.forEach(function(node, index){
-		outputElement.append(node);
-	});
 }
 
 document.getElementById("add_button").addEventListener("click", function(){
@@ -84,20 +21,11 @@ document.getElementById("add_button").addEventListener("click", function(){
 				if(ajax.status == 200){
 					var response = ajax.responseText;
 					if(JSON.parse(response).status == "ok"){
-						inputElement.value = "";
-						let newElement = document.createElement("li");
-						let id = parseInt(getMaxNumber()) + 1;
-						newElement.setAttribute("id", "item_"+id);
-						newElement.innerHTML =  "<span id=\"number\">"+id+"</span><span>.</span>" +
-											"<span id=\"value\">"+text+"</span>" +
-											"<button id=\"edit_button\" data-id=\""+id+"\" class=\"button-edit\">✐</button>" +
-											"<button id=\"del_button\" data-id=\""+id+"\" class=\"button-delete\">✕</button>";
-						outputElement.append(newElement);
-						sort();
+						location.reload();
 					}
-					else alert("Не удалось удалить запись");
+					else alert("Не удалось добавить запись");
 				}
-				else alert("Не удалось удалить запись");
+				else alert("Не удалось добавить запись");
 			}
 		};
 		ajax.open("POST", URL);
@@ -156,12 +84,11 @@ outputElement.addEventListener('click', function(event){
 					if(ajax.status == 200){
 						var response = ajax.responseText;
 						if(JSON.parse(response).status == "ok"){
-							editOutputElement.querySelector("span[id=value]").textContent = text;
-							sort();
+							location.reload();
 						}
-						else alert("Не удалось удалить запись");
+						else alert("Не удалось изменить запись");
 					}
-					else alert("Не удалось удалить запись");
+					else alert("Не удалось изменить запись");
 				}
 			};
 			ajax.open("POST", URL);
@@ -175,8 +102,6 @@ outputElement.addEventListener('click', function(event){
 });
 
 document.getElementById("radio_box").addEventListener("click", function(){
-	sort();
+	location.replace("http://localhost:3000/?sort="+getIndexCheckedRadioButton());
 });
-
-sort();
 

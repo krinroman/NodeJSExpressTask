@@ -14,11 +14,37 @@ var pool = mysql.createPool({
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-	pool.query("SELECT * FROM words", function(err, data) {
+	let indexSort = req.query.sort;
+	let querySort;
+	switch (indexSort) {
+		case "0":{
+			querySort = "ORDER BY words.id ASC";
+		}	
+			break;
+		case "1":{
+			querySort = "ORDER BY words.id DESC";
+		}	
+			break;
+		case "2":{
+			querySort = "ORDER BY words.value ASC";
+		}	
+			break;
+		case "3":{
+			querySort = "ORDER BY words.value DESC";
+		}
+			break;
+		default:{
+			indexSort = 0;
+			querySort = "ORDER BY words.id ASC";
+		}
+			break;
+	}
+	console.log(querySort);
+	pool.query("SELECT * FROM words " + querySort, function(err, data) {
 	    if(err) return console.log(err);
 	    else{
-	    	let indexSort = req.query.sort;
-			if(indexSort < 0 || indexSort > 3 || !indexSort) indexSort = 0;
+	    	console.log(indexSort);
+	    	console.log(data);
 	  		res.render('index', { indexSort: indexSort, listItem: data});
 	    }
      });
