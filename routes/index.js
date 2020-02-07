@@ -1,14 +1,15 @@
 var express = require('express');
 var mysql = require("mysql2");
+var config = require("../config.js");
 var router = express.Router();
 
 // create pool connect to database
 var pool = mysql.createPool({
   connectionLimit: 5,
-  host: "localhost",
-  database: "test",
-  user: "root",
-  password: "t3alert00"
+  host: config.host,
+  database: config.database,
+  user: config.user,
+  password: config.password
 });
 
 /* GET home page. */
