@@ -1,0 +1,43 @@
+*{
+	font-size: 1.1em;
+}
+
+input{
+	border: 1px solid black;
+}
+
+#input_text{
+	margin-left: 40px;
+}
+
+.button-simple{
+	border: 1px solid black;
+	margin-left: 10px;
+}
+
+.button-delete{
+	color:red;
+	border: none;
+	background: white;
+}
+
+.button-edit{
+	color: blue;
+	border: none;
+	background: white;
+}
+	
+.list{
+	list-style-type: none;
+}
+
+#radio_box{
+	margin-left: 40px;
+	font-size: 1em;
+}
+
+#radio_box input{
+	width: 20px;
+	height: 20px;
+}
+

@@ -1,0 +1,45 @@
+extends layout
+
+block content
+    input(type="text" id="input_text")
+    button(id="add_button").button-simple Добавить
+    div(id="radio_box")
+        mixin radio(isChecked, textContent)
+            if isChecked
+                p
+                    input(name="sort" type="radio" checked="true") 
+                    =textContent
+            else
+                p
+                    input(name="sort" type="radio") 
+                    =textContent
+
+        if indexSort == 0
+            +radio(true, 'По возрастанию номера')
+        else
+            +radio(false, 'По возрастанию номаера')
+        
+        if indexSort == 1
+            +radio(true, 'По убыванию номаера')
+        else
+            +radio(false, 'По убыванию номаера')
+        
+        if indexSort == 2
+            +radio(true, 'По алфавиту')
+        else
+            +radio(false, 'По алфавиту')
+        
+        if indexSort == 3
+            +radio(true, 'В обратном алфавитном порядке')
+        else
+            +radio(false, 'В обратном алфавитном порядке')
+
+    ul(id="list_out").list
+        each value in listItem
+            li(id="item_"+value.id)
+                span(id="number")=value.id
+                span .
+                span(id="value")=value.value
+                button(id="edit_button" data-id=value.id).button-edit ✐
+                button(id="del_button" data-id=value.id).button-delete ✕
+    script(type="text/javascript" src="/javascripts/main.js")
