@@ -52,9 +52,9 @@ document.addEventListener("DOMContentLoaded", function(){
 					let login = JSON.parse(response).login;
 					document.getElementById("user_name").textContent = login;
 				}
-				else alert("Не получить логин");
+				else alert("Не удалось получить логин");
 			}
-			else alert("Не получить логин");
+			else alert("Не удалось получить логин");
 		}
 	};
 	ajax.open("POST", URL);

@@ -97,25 +97,26 @@ router.post('/:id', function(req, res, next){
 	    else{
 	  		if(data[0].user_id != parseInt(userId)){ 
 	  			res.send(JSON.stringify({status: "error"}));
-	  			return;
+	  		}
+	  		else{
+	  			if(!value){ 
+					res.send(JSON.stringify({status: "error"}));
+					console.log("Значение не задано");
+				}
+				else{
+						pool.query("UPDATE words SET value = '"+value+"' WHERE words.id = "+id, function(err, data) {
+						    if(err){ 
+						    	res.send(JSON.stringify({status: "error"}));
+						    	console.log(err);
+						    }
+						    else{
+						    	res.send(JSON.stringify({status: "ok"}));
+						    }
+					    });
+				}
 	  		}
 	    }
     });
-	if(!value){ 
-		res.send(JSON.stringify({status: "error"}));
-		console.log("Значение не задано");
-	}
-	else{
-			pool.query("UPDATE words SET value = '"+value+"' WHERE words.id = "+id, function(err, data) {
-			    if(err){ 
-			    	res.send(JSON.stringify({status: "error"}));
-			    	console.log(err);
-			    }
-			    else{
-			    	res.send(JSON.stringify({status: "ok"}));
-			    }
-		    });
-	}
 });
 
 /* POST delete item to database */
@@ -127,17 +128,18 @@ router.post('/delete/:id', function(req, res, next){
 	    else{
 	  		if(data[0].user_id != parseInt(userId)){ 
 	  			res.send(JSON.stringify({status: "error"}));
-	  			return;
 	  		}
-	    }
-    });
-	pool.query("DELETE FROM words WHERE words.id = "+id, function(err, data) {
-	    if(err){ 
-	    	res.send(JSON.stringify({status: "error"}));
-	    	console.log(err);
-	    }
-	    else{
-	    	res.send(JSON.stringify({status: "ok"}));
+	  		else{
+	  			pool.query("DELETE FROM words WHERE words.id = "+id, function(err, data) {
+				    if(err){ 
+				    	res.send(JSON.stringify({status: "error"}));
+				    	console.log(err);
+				    }
+				    else{
+				    	res.send(JSON.stringify({status: "ok"}));
+				    }
+		    	});
+	  		}
 	    }
     });
 });

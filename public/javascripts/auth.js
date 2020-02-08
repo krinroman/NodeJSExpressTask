@@ -22,9 +22,9 @@ document.getElementById("enter").addEventListener('click', function(){
 						document.cookie = "userId="+ JSON.parse(response).id;
 						location.reload();
 					}
-					else alert("Не удалось добавить пользователя");
+					else alert("Не удалось авторизоваться на сайте\nПопробуйте зарегистрироваться");
 				}
-				else alert("Не удалось добавить пользователя");
+				else alert("Не удалось авторизоваться на сайте\nПопробуйте зарегистрироваться");
 			}
 		};
 		ajax.open("POST", URL);
