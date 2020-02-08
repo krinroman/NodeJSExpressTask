@@ -1,0 +1,13 @@
+extends layout
+
+block content
+    div.wrapper
+        div.auth-block
+            span Логин
+            input(type="text" id="login")
+            span Пароль
+            input(type="password" id="password")
+            div.buttons
+                button(id="enter") Вход
+                button(id="reg") Регистрация
+    script(type="text/javascript" src="/javascripts/auth.js")

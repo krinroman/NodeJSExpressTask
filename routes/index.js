@@ -14,6 +14,11 @@ var pool = mysql.createPool({
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
+	if(!req.cookies.userId){
+		res.render('auth');
+		return;
+	}
+	let userId = req.cookies.userId;	
 	let indexSort = req.query.sort;
 	let querySort;
 	switch (indexSort) {
@@ -39,19 +44,17 @@ router.get('/', function(req, res, next) {
 		}
 			break;
 	}
-	console.log(querySort);
-	pool.query("SELECT * FROM words " + querySort, function(err, data) {
+	pool.query("SELECT * FROM words WHERE words.user_id = '"+userId+"' " + querySort, function(err, data) {
 	    if(err) return console.log(err);
 	    else{
-	    	console.log(indexSort);
-	    	console.log(data);
 	  		res.render('index', { indexSort: indexSort, listItem: data});
 	    }
-     });
+    });
 });
 
 /* POST add item to database */
 router.post('/', function(req, res, next){
+	let userId = req.cookies.userId;
 	let id = req.body.id;
 	let value = req.body.value;
 	if(!value){ 
@@ -60,7 +63,7 @@ router.post('/', function(req, res, next){
 	}
 	else{
 		if(!id){
-			pool.query("INSERT INTO words (value) VALUES ('"+value+"')", function(err, data) {
+			pool.query("INSERT INTO words (value, user_id) VALUES ('"+value+"', '"+userId+"')", function(err, data) {
 			    if(err){ 
 			    	res.send(JSON.stringify({status: "error"}));
 			    	console.log(err);
@@ -71,7 +74,7 @@ router.post('/', function(req, res, next){
 		    });
 		}
 		else{
-			pool.query("INSERT INTO words (id, value) VALUES ('"+id+"', '"+value+"')", function(err, data) {
+			pool.query("INSERT INTO words (id, value, user_id) VALUES ('"+id+"', '"+value+"''"+userId+"')", function(err, data) {
 			    if(err){ 
 			    	res.send(JSON.stringify({status: "error"}));
 			    	console.log(err);
@@ -88,6 +91,16 @@ router.post('/', function(req, res, next){
 router.post('/:id', function(req, res, next){
 	let id = req.params.id;
 	let value = req.body.value;
+	let userId = req.cookies.userId;
+	pool.query("SELECT * FROM words WHERE words.id = "+id, function(err, data) {
+	    if(err) return console.log(err);
+	    else{
+	  		if(data[0].user_id != parseInt(userId)){ 
+	  			res.send(JSON.stringify({status: "error"}));
+	  			return;
+	  		}
+	    }
+    });
 	if(!value){ 
 		res.send(JSON.stringify({status: "error"}));
 		console.log("Значение не задано");
@@ -108,6 +121,16 @@ router.post('/:id', function(req, res, next){
 /* POST delete item to database */
 router.post('/delete/:id', function(req, res, next){
 	let id = req.params.id;
+	let userId = req.cookies.userId;
+	pool.query("SELECT * FROM words WHERE words.id = "+id, function(err, data) {
+	    if(err) return console.log(err);
+	    else{
+	  		if(data[0].user_id != parseInt(userId)){ 
+	  			res.send(JSON.stringify({status: "error"}));
+	  			return;
+	  		}
+	    }
+    });
 	pool.query("DELETE FROM words WHERE words.id = "+id, function(err, data) {
 	    if(err){ 
 	    	res.send(JSON.stringify({status: "error"}));
@@ -118,5 +141,62 @@ router.post('/delete/:id', function(req, res, next){
 	    }
     });
 });
+
+/* POST get login by id user */
+router.post('/user/get', function(req, res, next){
+	let id = req.body.id;
+	console.log(id);
+	pool.query("SELECT * FROM users WHERE users.id = "+id, function(err, data) {
+	    if(err){ 
+	    	res.send(JSON.stringify({status: "error"}));
+	    	console.log(err);
+	    }
+	    else{
+	    	if(data.length == 1){
+	    		res.send(JSON.stringify({status: "ok", login: data[0].login}));
+	    	}
+	    	else{
+	    		res.send(JSON.stringify({status: "error"}));
+	    	}
+	    }
+    });
+});
+
+/* POST add user to database */
+router.post('/user/add', function(req, res, next){
+	let login = req.body.login;
+	let password = req.body.password;
+	pool.query("INSERT INTO users (login, password) VALUES ('"+login+"', '"+password+"');", function(err, data){
+	    if(err){ 
+	    	res.send(JSON.stringify({status: "error"}));
+	    	console.log(err);
+	    }
+	    else{
+	    	res.send(JSON.stringify({status: "ok", id: data.insertId}));	
+	    	
+	    }
+    });
+});
+
+/* POST valid user to database */
+router.post('/user/valid', function(req, res, next){
+	let login = req.body.login;
+	let password = req.body.password;
+	pool.query("SELECT id, login, password FROM users WHERE users.login = '"+login+"'", function(err, data) {
+	    if(err){ 
+	    	res.send(JSON.stringify({status: "error"}));
+	    	console.log(err);
+	    }
+	    else{
+	    	if(data.length == 1 && data[0].password == password){
+	    		res.send(JSON.stringify({status: "ok", id: data[0].id}));
+	    	}
+	    	else{
+	    		res.send(JSON.stringify({status: "error"}));
+	    	}
+	    }
+    });
+});
+
 
 module.exports = router;

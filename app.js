@@ -15,12 +15,16 @@ app.set('view engine', 'pug');
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
+app.use(cookieParser('8Y4PwvKoBz71Y8E8'));
 app.use(express.static(path.join(__dirname, 'public')));
+
 
 app.use('/', indexRouter);
 app.use('/:id', indexRouter);
 app.use('/delete/:id', indexRouter);
+app.use('/user/get', indexRouter);
+app.use('/user/add', indexRouter);
+app.use('/user/valid', indexRouter);
 
 
 // catch 404 and forward to error handler

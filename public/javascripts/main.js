@@ -1,3 +1,67 @@
+let setCookie = function(name, value, options = {}){
+
+  options = {
+    path: '/',
+    // при необходимости добавьте другие значения по умолчанию
+    ...options
+  };
+
+  if (options.expires instanceof Date) {
+    options.expires = options.expires.toUTCString();
+  }
+
+  let updatedCookie = encodeURIComponent(name) + "=" + encodeURIComponent(value);
+
+  for (let optionKey in options) {
+    updatedCookie += "; " + optionKey;
+    let optionValue = options[optionKey];
+    if (optionValue !== true) {
+      updatedCookie += "=" + optionValue;
+    }
+  }
+
+  document.cookie = updatedCookie;
+}
+
+ 
+function getCookie ( cookie_name )
+{
+  var results = document.cookie.match ( '(^|;) ?' + cookie_name + '=([^;]*)(;|$)' );
+ 
+  if ( results )
+    return ( unescape ( results[2] ) );
+  else
+    return null;
+}
+
+let deleteCookie =  function(name){
+  setCookie(name, "", {
+    'max-age': -1
+  })
+}
+
+document.addEventListener("DOMContentLoaded", function(){
+	let data = {id: getCookie("userId")};
+	let URL = "/user/get";
+	var ajax = new XMLHttpRequest();
+	ajax.onreadystatechange = function() {
+		if (ajax.readyState == 4) {
+			if(ajax.status == 200){
+				var response = ajax.responseText;
+				if(JSON.parse(response).status == "ok"){
+					let login = JSON.parse(response).login;
+					document.getElementById("user_name").textContent = login;
+				}
+				else alert("Не получить логин");
+			}
+			else alert("Не получить логин");
+		}
+	};
+	ajax.open("POST", URL);
+	ajax.setRequestHeader("Content-type", "application/json");
+	ajax.send(JSON.stringify(data));
+});
+
 let inputElement = document.getElementById("input_text");
 let outputElement = document.getElementById("list_out");
 
@@ -32,6 +96,11 @@ document.getElementById("add_button").addEventListener("click", function(){
 		ajax.setRequestHeader("Content-type", "application/json");
 		ajax.send(JSON.stringify(data));
 	}	
+});
+
+document.getElementById("exit_button").addEventListener("click",function(){
+	deleteCookie("userId");
+	location.reload();
 });
 
 outputElement.addEventListener('click', function(event){
@@ -104,4 +173,7 @@ outputElement.addEventListener('click', function(event){
 document.getElementById("radio_box").addEventListener("click", function(){
 	location.replace("http://localhost:3000/?sort="+getIndexCheckedRadioButton());
 });
+
+
+
 
