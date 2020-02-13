@@ -15,16 +15,15 @@ document.getElementById("enter").addEventListener('click', function(){
 		var ajax = new XMLHttpRequest();
 		ajax.onreadystatechange = function() {
 			if (ajax.readyState == 4) {
-				if(ajax.status == 200){
+				try {
+					if(ajax.status != 200) throw new SyntaxError("Статус запроса: " + ajax.status);
 					var response = ajax.responseText;
-					console.log(response);
-					if(JSON.parse(response).status == "ok"){
-						document.cookie = "userId="+ JSON.parse(response).id;
-						location.reload();
-					}
-					else alert("Не удалось авторизоваться на сайте\nПопробуйте зарегистрироваться");
+					if(JSON.parse(response).status != "ok") throw new SyntaxError("Сервер вернул ответ: " + JSON.parse(response).status);
+					location.reload();
+				} catch (error) {
+					console.log('Ошибка ' + error.name + "\n" + error.message + "\n" + error.stack);
+					alert("Не удалось авторизоваться на сайте\nПопробуйте зарегистрироваться");
 				}
-				else alert("Не удалось авторизоваться на сайте\nПопробуйте зарегистрироваться");
 			}
 		};
 		ajax.open("POST", URL);
@@ -41,16 +40,15 @@ document.getElementById("reg").addEventListener('click', function(){
 		var ajax = new XMLHttpRequest();
 		ajax.onreadystatechange = function() {
 			if (ajax.readyState == 4) {
-				if(ajax.status == 200){
+				try {
+					if(ajax.status != 200) throw new SyntaxError("Статус запроса: " + ajax.status);
 					var response = ajax.responseText;
-					console.log(response);
-					if(JSON.parse(response).status == "ok"){
-						document.cookie = "userId="+ JSON.parse(response).id;
-						location.reload();
-					}
-					else alert("Не удалось добавить пользователя");
+					if(JSON.parse(response).status != "ok") throw new SyntaxError("Сервер вернул ответ: " + JSON.parse(response).status);
+					location.reload();
+				} catch (error) {
+					console.log('Ошибка ' + error.name + "\n" + error.message + "\n" + error.stack);
+					alert("Не удалось добавить пользователя");
 				}
-				else alert("Не удалось добавить пользователя");
 			}
 		};
 		ajax.open("POST", URL);

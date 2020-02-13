@@ -1,65 +1,23 @@
-let setCookie = function(name, value, options = {}){
-
-  options = {
-    path: '/',
-    // при необходимости добавьте другие значения по умолчанию
-    ...options
-  };
-
-  if (options.expires instanceof Date) {
-    options.expires = options.expires.toUTCString();
-  }
-
-  let updatedCookie = encodeURIComponent(name) + "=" + encodeURIComponent(value);
-
-  for (let optionKey in options) {
-    updatedCookie += "; " + optionKey;
-    let optionValue = options[optionKey];
-    if (optionValue !== true) {
-      updatedCookie += "=" + optionValue;
-    }
-  }
-
-  document.cookie = updatedCookie;
-}
-
- 
-function getCookie ( cookie_name )
-{
-  var results = document.cookie.match ( '(^|;) ?' + cookie_name + '=([^;]*)(;|$)' );
- 
-  if ( results )
-    return ( unescape ( results[2] ) );
-  else
-    return null;
-}
-
-let deleteCookie =  function(name){
-  setCookie(name, "", {
-    'max-age': -1
-  })
-}
-
 document.addEventListener("DOMContentLoaded", function(){
-	let data = {id: getCookie("userId")};
 	let URL = "/user/get";
 	var ajax = new XMLHttpRequest();
 	ajax.onreadystatechange = function() {
 		if (ajax.readyState == 4) {
-			if(ajax.status == 200){
+			try {
+				if(ajax.status != 200) throw new SyntaxError("Статус запроса: " + ajax.status);
 				var response = ajax.responseText;
-				if(JSON.parse(response).status == "ok"){
-					let login = JSON.parse(response).login;
-					document.getElementById("user_name").textContent = login;
-				}
-				else alert("Не удалось получить логин");
+				if(JSON.parse(response).status != "ok") throw new SyntaxError("Сервер вернул ответ: " + JSON.parse(response).status);
+				let login = JSON.parse(response).login;
+				document.getElementById("user_name").textContent = login;
+			} catch (error) {
+				console.log('Ошибка ' + error.name + "\n" + error.message + "\n" + error.stack);
+				alert("Не удалось получить логин");
 			}
-			else alert("Не удалось получить логин");
 		}
 	};
 	ajax.open("POST", URL);
 	ajax.setRequestHeader("Content-type", "application/json");
-	ajax.send(JSON.stringify(data));
+	ajax.send();
 });
 
 let inputElement = document.getElementById("input_text");
@@ -82,14 +40,15 @@ document.getElementById("add_button").addEventListener("click", function(){
 		var ajax = new XMLHttpRequest();
 		ajax.onreadystatechange = function() {
 			if (ajax.readyState == 4) {
-				if(ajax.status == 200){
+				try {
+					if(ajax.status != 200) throw new SyntaxError("Статус запроса: " + ajax.status);
 					var response = ajax.responseText;
-					if(JSON.parse(response).status == "ok"){
-						location.reload();
-					}
-					else alert("Не удалось добавить запись");
+					if(JSON.parse(response).status != "ok") throw new SyntaxError("Сервер вернул ответ: " + JSON.parse(response).status);
+					location.reload();
+				} catch (error) {
+					console.log('Ошибка ' + error.name + "\n" + error.message + "\n" + error.stack);
+					alert("Не удалось добавить запись");
 				}
-				else alert("Не удалось добавить запись");
 			}
 		};
 		ajax.open("POST", URL);
@@ -99,8 +58,15 @@ document.getElementById("add_button").addEventListener("click", function(){
 });
 
 document.getElementById("exit_button").addEventListener("click",function(){
-	deleteCookie("userId");
-	location.reload();
+	let URL = "/user/logout";
+	var ajax = new XMLHttpRequest();
+	ajax.onreadystatechange = function() {
+		if (ajax.readyState == 4) {
+			location.reload();
+		}
+	};
+	ajax.open("POST", URL);
+	ajax.send();
 });
 
 outputElement.addEventListener('click', function(event){
@@ -110,14 +76,15 @@ outputElement.addEventListener('click', function(event){
 		var ajax = new XMLHttpRequest();
 		ajax.onreadystatechange = function() {
 			if (ajax.readyState == 4) {
-				if(ajax.status == 200){
+				try {
+					if(ajax.status != 200) throw new SyntaxError("Статус запроса: " + ajax.status);
 					var response = ajax.responseText;
-					if(JSON.parse(response).status == "ok"){
-						document.getElementById("item_"+id).remove();
-					}
-					else alert("Не удалось удалить запись");
+					if(JSON.parse(response).status != "ok") throw new SyntaxError("Сервер вернул ответ: " + JSON.parse(response).status);
+					document.getElementById("item_"+id).remove();
+				} catch (error) {
+					console.log('Ошибка ' + error.name + "\n" + error.message + "\n" + error.stack);
+					alert("Не удалось удалить запись");
 				}
-				else alert("Не удалось удалить запись");
 			}
 		};
 		ajax.open("POST", URL);
@@ -150,14 +117,15 @@ outputElement.addEventListener('click', function(event){
 			var ajax = new XMLHttpRequest();
 			ajax.onreadystatechange = function() {
 				if (ajax.readyState == 4) {
-					if(ajax.status == 200){
+					try {
+						if(ajax.status != 200) throw new SyntaxError("Статус запроса: " + ajax.status);
 						var response = ajax.responseText;
-						if(JSON.parse(response).status == "ok"){
-							location.reload();
-						}
-						else alert("Не удалось изменить запись");
+						if(JSON.parse(response).status != "ok") throw new SyntaxError("Сервер вернул ответ: " + JSON.parse(response).status);
+						location.reload();
+					} catch (error) {
+						console.log('Ошибка ' + error.name + "\n" + error.message + "\n" + error.stack);
+						alert("Не удалось изменить запись");
 					}
-					else alert("Не удалось изменить запись");
 				}
 			};
 			ajax.open("POST", URL);
@@ -171,9 +139,11 @@ outputElement.addEventListener('click', function(event){
 });
 
 document.getElementById("radio_box").addEventListener("click", function(){
-	location.replace("http://localhost:3000/?sort="+getIndexCheckedRadioButton());
+	let querySort;
+	let indexSort = getIndexCheckedRadioButton();
+	if(indexSort >= 2) querySort="sortField=value";
+	else querySort="sortField=id";
+	if(indexSort % 2 == 0) querySort += "&sortOrder=asc";
+	else querySort += "&sortOrder=desc"
+	location.replace("http://localhost:3000/?"+querySort);
 });
-
-
-
-
