@@ -1,5 +1,10 @@
 header{
 	overflow: hidden;
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 1000;
+	width: 100%;	
 }
 
 .header-wrapper{
@@ -7,6 +12,16 @@ header{
 	align-items: center;
 	height: 50px;
 	margin-bottom: 20px;
+	background-color: white;
+}
+
+.control-wrapper{
+	position: fixed;
+	top: 50px;
+	left: 0;
+	z-index: 1000;
+	width: 100%;
+	background-color: white;
 }
 
 .user-block{
@@ -103,9 +118,11 @@ header{
 
 .line{
 	border-top: 1px solid #e2e6ea;
+	margin-bottom: 0;
 }
 
 .list{
+	margin-top: 300px;
 	list-style-type: none;
 	font-size: 1.1em;
 	padding-top: 10px;
@@ -166,4 +183,8 @@ header{
 
 #switch_image{
 	display: none;
+}
+
+.content-wrapper{
+	margin-top: 80px;
 }

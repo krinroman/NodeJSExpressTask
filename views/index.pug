@@ -1,41 +1,42 @@
 extends layout
 
 block content
-    div.container
-        div.input-block.row
-            input.col-6.myInput(type="text" id="input_text")
-            button.col-2.btn.btn-outline-primary.myBtn(id="add_button").button-simple Добавить
-    div.container(id="radio_box")
-        mixin radio(isChecked, textContent)
-            if isChecked
-                p
-                    input(name="sort" type="radio" checked="true") 
-                    =textContent
-            else
-                p
-                    input(name="sort" type="radio") 
-                    =textContent
+    .control-wrapper
+        .container
+            .input-block.row
+                input.col-6.myInput(type="text" id="input_text")
+                button.col-2.btn.btn-outline-primary.myBtn(id="add_button").button-simple Добавить
+        .container(id="radio_box")
+            mixin radio(isChecked, textContent)
+                if isChecked
+                    p
+                        input(name="sort" type="radio" checked="true") 
+                        =textContent
+                else
+                    p
+                        input(name="sort" type="radio") 
+                        =textContent
 
-        if indexSort == 0
-            +radio(true, 'По возрастанию номера')
-        else
-            +radio(false, 'По возрастанию номера')
-        
-        if indexSort == 1
-            +radio(true, 'По убыванию номера')
-        else
-            +radio(false, 'По убыванию номера')
-        
-        if indexSort == 2
-            +radio(true, 'По алфавиту')
-        else
-            +radio(false, 'По алфавиту')
-        
-        if indexSort == 3
-            +radio(true, 'В обратном алфавитном порядке')
-        else
-            +radio(false, 'В обратном алфавитном порядке')
-    hr.line
+            if indexSort == 0
+                +radio(true, 'По возрастанию номера')
+            else
+                +radio(false, 'По возрастанию номера')
+            
+            if indexSort == 1
+                +radio(true, 'По убыванию номера')
+            else
+                +radio(false, 'По убыванию номера')
+            
+            if indexSort == 2
+                +radio(true, 'По алфавиту')
+            else
+                +radio(false, 'По алфавиту')
+            
+            if indexSort == 3
+                +radio(true, 'В обратном алфавитном порядке')
+            else
+                +radio(false, 'В обратном алфавитном порядке')
+        hr.line
     ul(id="list_out").list.container
         each value in listItem
             li(id="item_"+value.id).item
