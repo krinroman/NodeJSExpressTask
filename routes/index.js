@@ -1,6 +1,7 @@
 var express = require('express');
 var mysql = require("mysql2");
 var md5 = require('md5');
+var fs = require("fs");
 var config = require("../config.js");
 var router = express.Router();
 
@@ -13,6 +14,13 @@ var pool = mysql.createPool({
   user: config.user,
   password: config.password
 });
+
+function isFileExist(fileName){
+	fs.access(fileName, function(error){
+		if (error) return false;
+		return true;
+	});
+}
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -43,9 +51,17 @@ router.get('/', function(req, res, next) {
 	pool.query("SELECT * FROM words WHERE words.user_id = ? " + querySort, parseInt(userId), function(err, data) {
 	    if(err) return console.log(err);
 	    else{
-	  		res.render('index', { indexSort: indexSort, listItem: data});
+	  		res.render('index', { indexSort: indexSort, listItem: data, page: "list"});
 	    }
     });
+});
+
+router.get('/lk', function(req, res, next){
+	if(!req.session.userId){
+		res.render('auth');
+		return;
+	}
+	res.render('account', {page: "lk"});
 });
 
 /* POST add item to database */
@@ -161,15 +177,18 @@ router.post('/user/add', function(req, res, next){
 	let login = req.body.login;
 	let password = req.body.password;
 	let hashPassword = md5(password);
-	pool.query("INSERT INTO users (login, password) VALUES ( ?, ? )", login, hashPassword, function(err, data){
+	console.log(login + " "+ password);
+	pool.query("INSERT INTO users (login, password) VALUES ( ?, ? )", [login, hashPassword], function(err, data){
 	    if(err){ 
 	    	res.send(JSON.stringify({status: "error"}));
-	    	console.log(err);
+			console.log(err);
+			console.log("ОШИБКА");
 	    }
 	    else{
+			console.log(data);
+			if (!req.session.key) req.session.key = req.sessionID;
 			req.session.userId = data.insertId;
-	    	res.send(JSON.stringify({status: "ok"}));	
-	    	
+	    	res.send(JSON.stringify({status: "ok"}));	    	
 	    }
     });
 });
@@ -185,6 +204,7 @@ router.post('/user/valid', function(req, res, next){
 	    }
 	    else{
 	    	if(data.length == 1 && data[0].password === md5(password)){
+				if (!req.session.key) req.session.key = req.sessionID;
 				req.session.userId = data[0].id;
 	    		res.send(JSON.stringify({status: "ok"}));
 	    	}
@@ -201,6 +221,34 @@ router.post('/user/logout', function(req, res, next){
 		req.session.destroy(function() {});
 	  }
 	res.redirect('/');
+});
+
+/* POST download image */
+router.post('/image/download', function(req, res, next){
+	let filedata = req.file;
+	if(req.file){
+	  res.send(JSON.stringify({status: "ok"}));
+	}
+	else{
+	  res.send(JSON.stringify({status: "error"}));
+	}
+});
+
+/* POST valid image */
+router.post('/image/valid', function(req, res, next){
+	let userId = req.session.userId;
+	if(!userId){
+		res.send(JSON.stringify({status: "error"}));
+		return;
+	}
+	fs.access("public/images/image_user_" + userId + ".jpg", function(error){
+		if (!error){
+			res.send(JSON.stringify({status: "ok", imgSrc: "/images/image_user_" + userId + ".jpg"}));
+		}
+		else{
+			res.send(JSON.stringify({status: "error"}));
+		}
+	});
 });
 
 
