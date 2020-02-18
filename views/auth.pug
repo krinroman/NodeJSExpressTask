@@ -1,9 +1,8 @@
-doctype html
-html
-  head
-    title test
-    link(rel='stylesheet', href='/stylesheets/auth.css')
-  body
+extends layout
+
+block styles
+    link(rel='stylesheet' href='/stylesheets/auth.css')
+block content    
     div.wrapper
         div.auth-block
             span Логин
@@ -13,4 +12,5 @@ html
             div.buttons
                 button(id="enter") Вход
                 button(id="reg") Регистрация
+block scripts
     script(type="text/javascript" src="/javascripts/auth.js")

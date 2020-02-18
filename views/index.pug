@@ -1,5 +1,9 @@
 extends layout
 
+block styles
+    link(rel='stylesheet' href='/stylesheets/style.css')
+block header
+    include header
 block content
     .control-wrapper
         .container
@@ -46,4 +50,5 @@ block content
                 button(id="edit_button" data-id=value.id).button-edit ✐
                 button(id="del_button" data-id=value.id).button-delete ✕
 block scripts
+    script(type="text/javascript" src="/javascripts/main.js")
     script(type="text/javascript" src="/javascripts/list.js")

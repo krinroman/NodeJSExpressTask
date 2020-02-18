@@ -13,12 +13,12 @@ var config = require("./config.js");
 var indexRouter = require('./routes/index');
 
 var storageConfig = multer.diskStorage({
-	destination: (req, file, cb) =>{
-		cb(null, "public/images");
-	},
-	filename: (req, file, cb) =>{
-		cb(null, "image_user_"+req.session.userId+path.extname(file.originalname));
-	}
+destination: (req, file, cb) =>{
+    cb(null, "public/images");
+  },
+  filename: (req, file, cb) =>{
+    cb(null, "image_user_"+req.session.userId+path.extname(file.originalname));
+  }
   });
 
 var app = express();

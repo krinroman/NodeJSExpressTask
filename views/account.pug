@@ -1,5 +1,9 @@
 extends layout
 
+block styles
+    link(rel='stylesheet' href='/stylesheets/style.css')
+block header
+    include header
 block content
     .container
         .row.content-wrapper
@@ -12,5 +16,6 @@ block content
                 span(name="user_name")
                 br
         input(id="switch_image", type="file", name="filedata", accept="image/jpeg")
-block scripts    
+block scripts
+    script(type="text/javascript" src="/javascripts/main.js")
     script(type="text/javascript" src="/javascripts/account.js")

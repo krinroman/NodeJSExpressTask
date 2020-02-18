@@ -1,190 +1,190 @@
 header{
-	overflow: hidden;
-	position: fixed;
-	top: 0;
-	left: 0;
-	z-index: 1000;
-	width: 100%;	
+    overflow: hidden;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    width: 100%;    
 }
 
 .header-wrapper{
-	border-bottom: 1px solid #999;
-	align-items: center;
-	height: 50px;
-	margin-bottom: 20px;
-	background-color: white;
+    border-bottom: 1px solid #999;
+    align-items: center;
+    height: 50px;
+    margin-bottom: 20px;
+    background-color: white;
 }
 
 .control-wrapper{
-	position: fixed;
-	top: 50px;
-	left: 0;
-	z-index: 1000;
-	width: 100%;
-	background-color: white;
+    position: fixed;
+    top: 50px;
+    left: 0;
+    z-index: 1000;
+    width: 100%;
+    background-color: white;
 }
 
 .user-block{
-	display: inline-flex;
-	justify-content: flex-end;
+    display: inline-flex;
+    justify-content: flex-end;
 }
 
 .header-wrapper a{
-	padding: 0 10px;
-	color: #222;
-	display: flex;
-	align-items: center;
+    padding: 0 10px;
+    color: #222;
+    display: flex;
+    align-items: center;
 }
 
 .header-wrapper a:hover{
-	color: #222;
-	text-decoration: none;
-	background: #f8f9fa;
+    color: #222;
+    text-decoration: none;
+    background: #f8f9fa;
 }
 
 .img-avatar-header{
-	width: 35px;
-	height: 35px;
-	overflow: hidden;
-	border: 1px solid #222;
-	border-radius: 2rem;	
-	margin: 0 10px;
+    width: 35px;
+    height: 35px;
+    overflow: hidden;
+    border: 1px solid #222;
+    border-radius: 2rem;    
+    margin: 0 10px;
 }
 
 #header_user_img{
-	object-fit: cover;
-	width: 100%;
-	height: 100%;
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
 }
 
 #exit_button{
-	margin: 0 10px;
+    margin: 0 10px;
 }
 
 #user_name_header{
-	font-size: 1.1em;
-	color: #222;
-	display: flex;
-	align-items: center;
+    font-size: 1.1em;
+    color: #222;
+    display: flex;
+    align-items: center;
 }
 
 .active-item{
-	background: #e2e6ea;
+    background: #e2e6ea;
 }
 
 .active-item:hover{
-	background: #e2e6ea !important;
+    background: #e2e6ea !important;
 }
 
 .menu-block{
-	height: 100%;
-	display: flex;
-	justify-content: center;
+    height: 100%;
+    display: flex;
+    justify-content: center;
 }
 
 .nav-block{
-	height: 100%;
+    height: 100%;
 }
 
 .input-block{
-	margin: 20px 0;
+    margin: 20px 0;
 }
 
 .myInput{
-	margin: 0 10px;
-	border: 1px solid #999;
-	border-radius: .25rem;
+    margin: 0 10px;
+    border: 1px solid #999;
+    border-radius: .25rem;
 }
 
 .myInput:focus{
-	box-shadow: 0 0 0 0.2rem rgba(230, 230, 230, 0.5);
-	outline-offset: 0;
-	outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(230, 230, 230, 0.5);
+    outline-offset: 0;
+    outline: none;
 }
 
 .myBtn{
-	margin: 0 10px;
-	color: black !important;
-	border: 1px solid #999 !important;
+    margin: 0 10px;
+    color: black !important;
+    border: 1px solid #999 !important;
 }
 
 .myBtn:hover{
-	background-color: #e2e6ea !important;
+    background-color: #e2e6ea !important;
 }
 
 .myBtn:focus{
-	box-shadow: 0 0 0 0.2rem rgba(230, 230, 230, 0.5) !important;
+    box-shadow: 0 0 0 0.2rem rgba(230, 230, 230, 0.5) !important;
 }
 
 .line{
-	border-top: 1px solid #e2e6ea;
-	margin-bottom: 0;
+    border-top: 1px solid #e2e6ea;
+    margin-bottom: 0;
 }
 
 .list{
-	margin-top: 300px;
-	list-style-type: none;
-	font-size: 1.1em;
-	padding-top: 10px;
+    margin-top: 300px;
+    list-style-type: none;
+    font-size: 1.1em;
+    padding-top: 10px;
 }
 
 .item{
-	padding: 5px 0;
-	height: 35px;
-	display: flex ;
-	align-items: center;
+    padding: 5px 0;
+    height: 35px;
+    display: flex ;
+    align-items: center;
 }
 
 #edit_button{
-	background: white;
-	border: none;
-	margin: 0 5px;
+    background: white;
+    border: none;
+    margin: 0 5px;
 }
 #edit_button:hover{
-	font-size: 1.2em;
+    font-size: 1.2em;
 }
 #del_button:hover{
-	font-size: 1.2em;
+    font-size: 1.2em;
 }
 
 #del_button{
-	background: white;
-	border: none;
-	color: red;
-	margin: 0 5px;
+    background: white;
+    border: none;
+    color: red;
+    margin: 0 5px;
 }
 
 #edit_input{
-	margin: 0 5px;
+    margin: 0 5px;
 }
 
 #ok_button{
-	padding: 2px 10px 2px 10px;
-	margin: 0 5px;
+    padding: 2px 10px 2px 10px;
+    margin: 0 5px;
 }
 
 #cancel_button{
-	padding: 2px 10px 2px 10px;
-	margin: 0 5px;
+    padding: 2px 10px 2px 10px;
+    margin: 0 5px;
 }
 
 .img-avatar{
-	border: 2px solid #444;
-	border-radius: 0.3rem;
+    border: 2px solid #444;
+    border-radius: 0.3rem;
 }
 
 #download_image_button{
-	margin: 20px 0 !important;
+    margin: 20px 0 !important;
 }
 
 .content-block{
-	font-size: 1.3em;
+    font-size: 1.3em;
 }
 
 #switch_image{
-	display: none;
+    display: none;
 }
 
 .content-wrapper{
-	margin-top: 80px;
+    margin-top: 80px;
 }
