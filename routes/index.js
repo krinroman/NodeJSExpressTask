@@ -1,20 +1,9 @@
 var express = require('express');
-var mysql = require("mysql2");
 var md5 = require('md5');
 var fs = require("fs");
-var config = require("../config.js");
 var data = require("../data/data.js");
 var router = express.Router();
 
-
-// create pool connect to database
-var pool = mysql.createPool({
-  connectionLimit: 5,
-  host: config.host,
-  database: config.database,
-  user: config.user,
-  password: config.password
-});
 
 /* GET home page. */
 router.get('/', function(req, res, next){
