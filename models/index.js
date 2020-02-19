@@ -32,8 +32,6 @@ fs.readdirSync(__dirname).filter(function (file) {
     db[model.name] = model;
 });
 
-console.log(db);
-
 Object.keys(db).forEach(function (modelName) {
     if ('associate' in db[modelName]) {
         db[modelName].associate(db);

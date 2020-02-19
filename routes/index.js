@@ -42,7 +42,7 @@ router.get('/lk', function(req, res, next){
     res.render('account', { page: "lk" });
 });
 
-/* POST add item to dbbase */
+/* POST add item to database */
 router.post('/add', function(req, res, next){
     let userId = req.session.userId;
     let id = req.body.id;
@@ -71,7 +71,7 @@ router.post('/add', function(req, res, next){
     }
 });
 
-/* POST edit item to dbbase */
+/* POST edit item to database */
 router.post('/edit/:id', function(req, res, next){
     let id = req.params.id;
     let value = req.body.value;
@@ -94,7 +94,7 @@ router.post('/edit/:id', function(req, res, next){
         });
 });
 
-/* POST delete item to dbbase */
+/* POST delete item to database */
 router.post('/delete/:id', function(req, res, next){
     let id = req.params.id;
     let userId = req.session.userId;
@@ -128,7 +128,7 @@ router.post('/user/get', function(req, res, next){
         });
 });
 
-/* POST add user to dbbase */
+/* POST add user to database */
 router.post('/user/add', function(req, res, next){
     let login = req.body.login;
     let password = req.body.password;
@@ -158,7 +158,7 @@ router.post('/user/add', function(req, res, next){
     
 });
 
-/* POST valid user to dbbase */
+/* POST valid user to database */
 router.post('/user/valid', function(req, res, next){
     let login = req.body.login;
     let password = req.body.password;
