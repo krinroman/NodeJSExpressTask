@@ -1,9 +1,8 @@
 var express = require('express');
 var md5 = require('md5');
 var fs = require("fs");
-var data = require("../data/data.js");
+var db = require("../models");
 var router = express.Router();
-
 
 /* GET home page. */
 router.get('/', function(req, res, next){
@@ -25,7 +24,7 @@ router.get('/', function(req, res, next){
     if(sortOrder == 'DESC') indexSort += 1; 
     
 
-    data.item.findAll({where: {userId: userId}, order: [[sortField, sortOrder]], raw: true})
+    db.item.findAll({where: {userId: userId}, order: [[sortField, sortOrder]], raw: true})
         .then(items=>{
             res.render('index', { indexSort: indexSort, listItem: items, page: "list"});
         }).catch((err) => {
@@ -43,7 +42,7 @@ router.get('/lk', function(req, res, next){
     res.render('account', { page: "lk" });
 });
 
-/* POST add item to database */
+/* POST add item to dbbase */
 router.post('/add', function(req, res, next){
     let userId = req.session.userId;
     let id = req.body.id;
@@ -53,7 +52,7 @@ router.post('/add', function(req, res, next){
         return;
     }
     if(!id){
-        data.item.create({ value: value, userId: userId })
+        db.item.create({ value: value, userId: userId })
             .then(() => {
                 res.send(JSON.stringify({status: "ok"}));
             }).catch((err) => {
@@ -62,7 +61,7 @@ router.post('/add', function(req, res, next){
             });
     }
     else{
-        data.item.create({ id: id, value: value, userId: userId })
+        db.item.create({ id: id, value: value, userId: userId })
             .then(() => {
                 res.send(JSON.stringify({status: "ok"}));
             }).catch((err) => {
@@ -72,7 +71,7 @@ router.post('/add', function(req, res, next){
     }
 });
 
-/* POST edit item to database */
+/* POST edit item to dbbase */
 router.post('/edit/:id', function(req, res, next){
     let id = req.params.id;
     let value = req.body.value;
@@ -81,7 +80,7 @@ router.post('/edit/:id', function(req, res, next){
         res.send(JSON.stringify({status: "error"}));
         return console.log("Значение для изменения не задано");
     }
-    data.item.update({ value: value }, {where: {id: id, userId: userId}})
+    db.item.update({ value: value }, {where: {id: id, userId: userId}})
         .then(item=>{
             if(!item){
                 res.send(JSON.stringify({status: "error", message: "Пользователь не определен"}));
@@ -95,11 +94,11 @@ router.post('/edit/:id', function(req, res, next){
         });
 });
 
-/* POST delete item to database */
+/* POST delete item to dbbase */
 router.post('/delete/:id', function(req, res, next){
     let id = req.params.id;
     let userId = req.session.userId;
-    data.item.destroy({where: {id: id, userId: userId}})
+    db.item.destroy({where: {id: id, userId: userId}})
         .then(item=>{
             if(!item){
                 res.send(JSON.stringify({status: "error", message: "Пользователь не определен"}));
@@ -116,7 +115,7 @@ router.post('/delete/:id', function(req, res, next){
 /* POST get login by id user */
 router.post('/user/get', function(req, res, next){
     let id = req.session.userId;
-    data.user.findByPk(id)
+    db.user.findByPk(id)
         .then(user=>{
             if(!user){
                 res.send(JSON.stringify({status: "error"}));
@@ -129,16 +128,16 @@ router.post('/user/get', function(req, res, next){
         });
 });
 
-/* POST add user to database */
+/* POST add user to dbbase */
 router.post('/user/add', function(req, res, next){
     let login = req.body.login;
     let password = req.body.password;
     let hashPassword = md5(password);
     console.log("add user: " + login);
-    data.user.findOne({where: {login: login}})
+    db.user.findOne({where: {login: login}})
         .then(user=>{
             if(!user){
-                data.user.create({login: login, password: hashPassword})
+                db.user.create({login: login, password: hashPassword})
                     .then(user=>{
                         if (!req.session.key) req.session.key = req.sessionID;
                         req.session.userId = user.id;
@@ -159,11 +158,11 @@ router.post('/user/add', function(req, res, next){
     
 });
 
-/* POST valid user to database */
+/* POST valid user to dbbase */
 router.post('/user/valid', function(req, res, next){
     let login = req.body.login;
     let password = req.body.password;
-    data.user.findOne({where: {login: login}})
+    db.user.findOne({where: {login: login}})
         .then(user=>{
             if(!user){
                 res.send(JSON.stringify({status: "error", message: "Пользователь не найден, пожалуйста зарегистрируйтесь"}));
@@ -192,7 +191,7 @@ router.post('/user/logout', function(req, res, next){
 
 /* POST download image */
 router.post('/image/download', function(req, res, next){
-    let filedata = req.file;
+    let filedb = req.file;
     if(req.file){
       res.send(JSON.stringify({status: "ok"}));
     }

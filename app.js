@@ -19,7 +19,7 @@ destination: (req, file, cb) =>{
   filename: (req, file, cb) =>{
     cb(null, "image_user_"+req.session.userId+path.extname(file.originalname));
   }
-  });
+});
 
 var app = express();
 
